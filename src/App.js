@@ -1,26 +1,40 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {Container, Header, } from "semantic-ui-react";
+import FlashCards from "./FlashCards";
+import CardForm from "./CardForm";
 
 class App extends Component {
+  state = {
+    flashCards: [
+      { id:1, title: "Card 1", description: "Def. 1", },
+      { id:2, title: "Card 2", description: "Def. 2", },
+      { id:3, title: "Card 3", description: "Def. 3", },
+    ],
+  }
+
+  getId = () => Math.floor((1 + Math.random()) * 10000)
+
+  addCard = (cardData) => {
+    let flashCard = { id: this.getId(), ...cardData, }
+    this.setState({ flashCards: [flashCard, ...this.state.flashCards], })
+  }
+
+  removeCard = (id) => {
+    const flashCards = this.state.flashCards.filter( flashCard => {
+      if (flashCard.id !== id)
+        return flashCard
+    })
+    this.setState({ flashCards,})
+  }
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <Container style={{ paddingTop: "25px" }}>
+        <Header as="h1" textAlign="center">React Flash Cards</Header>
+        <br />
+        <CardForm addCard={this.addCard} />
+        <br />
+        <FlashCards cardList={this.state.flashCards} remove={this.removeCard} />
+      </Container>
     );
   }
 }
