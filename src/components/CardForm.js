@@ -4,9 +4,21 @@ import { Form, } from "semantic-ui-react";
 class CardForm extends React.Component {
   state = { title: "", description: "" }
 
+  componentDidMount() {
+    if (this.props.id) {
+      const { title, description } = this.props
+      this.setState({ title, description })
+    }
+  }
+
   handleSubmit = (e) => {
     e.preventDefault()
-    this.props.addCard(this.state)
+    if (this.props.id) {
+      this.props.edit({ id: this.props.id, ...this.state, })
+      this.props.toggleEdit()
+    } else {
+      this.props.addCard(this.state)
+    }
     this.setState({ title: "", description: "", })
   }
 
